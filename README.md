@@ -4,6 +4,8 @@ Medical Appointment Scheduling System
 medicalTurn is a simple and practical medical appointment scheduling system built as a **university project** annd a **protfolio sample**.
 The project focuses on clean architecture, backend logic, and server-side rendering using Node.js.
 
+#### Doctor role is not verified in this educational project.
+
 ---
 
 ## Features ✨

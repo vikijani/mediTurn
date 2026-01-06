@@ -5,4 +5,6 @@ const router = e.Router();
 
 router.get("/get-user", UserController.getAllUser);
 
+router.post("/register", UserController.register);
+
 export default router;

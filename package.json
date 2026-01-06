@@ -1,0 +1,26 @@
+{
+  "name": "mediturn",
+  "version": "1.0.0",
+  "description": "Medical appointment scheduling system",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikijani/mediTurn.git"
+  },
+  "keywords": [],
+  "author": "vik",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/vikijani/mediTurn/issues"
+  },
+  "homepage": "https://github.com/vikijani/mediTurn#readme",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "express": "^5.2.1"
+  }
+}

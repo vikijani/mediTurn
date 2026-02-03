@@ -1,9 +1,9 @@
 import { configDotenv } from "dotenv";
-import joy from "joy";
+import joi from "joi";
 import JWT from "jsonwebtoken";
 import _ from "lodash";
 import bcrypt from "bcrypt";
-import User from "../model/users.js";
+import Users from "../model/users.js";
 
 export default class UserController {
     static async getAllUser(req, res) {
@@ -12,9 +12,9 @@ export default class UserController {
 
     static async register(req, res) {
         const { name, phone, role } = req.body;
-        const schema = joy.object({
-            phone: joy.string().required(),
-            password: joy.string().min(6).required()
+        const schema = joi.object({
+            phone: joi.string().required(),
+            password: joi.string().min(6).required()
         });
 
         const { error } = schema.validate(req.body, { allowUnknown: true });
@@ -23,13 +23,13 @@ export default class UserController {
         }
 
         try {
-            const exist = await User.findOne({ phone: req.body.phone })
+            const exist = await Users.findOne({ phone: req.body.phone })
             if (exist) {
                 return res.status(400).json({ message: "این شماره تلفن قبلا ثبت شده است." })
             }
 
             const hashPassword = await bcrypt.hash(req.body.password, 10);
-            const newuser = await User.create({
+            const newuser = await Users.create({
                 role: role,
                 name: name,
                 phone: phone,
@@ -49,14 +49,15 @@ export default class UserController {
                     data: _.pick(newuser, ["phone", "name"])
                 })
         } catch (e) {
+            console.log("REGISTER ERROR:", e);
             return res.status(500).json({ message: "ثبت نام انجام نشد خطا در سرور." })
         }
     }
 
     static async login(req, res) {
-        const schema = joy.object({
-            email: joy.string().email().required(),
-            password: joy.string().min(8).required()
+        const schema = joi.object({
+            email: joi.string().email().required(),
+            password: joi.string().min(8).required()
         });
 
         const { error } = schema.validate(req.body);
@@ -65,7 +66,7 @@ export default class UserController {
         }
 
         try {
-            const user = await User.findOne({ phone: req.body.phone, isActive: true });
+            const user = await Users.findOne({ phone: req.body.phone, isActive: true });
             if (!user) {
                 return res.status(400).json({ error: "شماره تماس یا رمز عبور اشتباه است." });
             }
@@ -87,7 +88,7 @@ export default class UserController {
             });
         } catch (err) {
             console.error("Login error:", err);
-            return res.status(500).json({message: "خطا در ورود کاربر."});
+            return res.status(500).json({ message: "خطا در ورود کاربر." });
         }
     }
 }

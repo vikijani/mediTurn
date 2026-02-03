@@ -5,6 +5,7 @@ import express from "express";
 
 import connectDB from "./src/config/database.js";
 import user from "./src/routes/users.js";
+import appointment from "./src/routes/appointment.js";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(user);
+app.use(appointment);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

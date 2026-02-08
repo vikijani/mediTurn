@@ -9,6 +9,8 @@ export default class AppointmentController {
             // check doctor
             const { doctorId, date, time } = req.body;
             const patientId = req.user.id;
+            const { id } = req.params;
+
 
             const doctor = await User.findById(doctorId);
             if (!doctor || doctor.role !== "doctor") {
@@ -20,7 +22,7 @@ export default class AppointmentController {
                 doctorId,
                 date,
                 time,
-                status: { $en: "canceled" }
+                status: { $ne: "canceled" }
             });
 
             if (exists) {

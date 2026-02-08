@@ -164,3 +164,14 @@ th, td {
   background: #3498db;
   color: #fff;
 }
+
+.pagination {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.pagination a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #3498db;
+}

@@ -15,12 +15,12 @@ const appointmentSchema = new mongoose.Schema(
     },
 
     date: {
-      type: String, // مثال: "2026-01-10"
+      type: String, 
       required: true,
     },
 
     time: {
-      type: String, // مثال: "14:30"
+      type: String, 
       required: true,
     },
 

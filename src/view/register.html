@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ثبت‌نام</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-container">
+  <h3>ایجاد حساب کاربری</h3>
+
+  <form>
+    <label>نقش</label>
+    <select name="role">
+      <option value="patient">بیمار</option>
+      <option value="doctor">دکتر</option>
+    </select>
+
+    <label>نام و نام خانوادگی</label>
+    <input type="text" name="name">
+
+    <label>شماره موبایل</label>
+    <input type="text" name="phone" placeholder="09xxxxxxxxx">
+
+    <label>رمز عبور</label>
+    <input type="password" name="password">
+
+    <button class="btn primary">ثبت‌نام</button>
+  </form>
+
+  <p class="auth-link">
+    حساب دارید؟
+    <a href="login.html">ورود</a>
+  </p>
+</div>
+
+</body>
+</html>

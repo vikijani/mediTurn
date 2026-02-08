@@ -20,6 +20,12 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
+app.set("views", "./src/view");
+
+app.get("/", (req, res) => {
+  res.render("index");
+});
 
 app.use(user);
 app.use(appointment);

@@ -1,0 +1,166 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f2f2f2;
+}
+
+.top-bar {
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
+  padding: 12px 20px;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.layout {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.content {
+  flex: 3;
+  background: #fff;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+.sidebar {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+h3 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f8f8f8;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.profile {
+  text-align: center;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  background: #eee;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu a {
+  display: block;
+  padding: 8px;
+  margin: 5px 0;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+}
+
+.menu a.active,
+.menu a:hover {
+  background: #eaeaea;
+}
+
+.logout {
+  text-align: center;
+  color: red;
+  text-decoration: none;
+}
+
+.status.free {
+  color: green;
+}
+
+.status.reserved {
+  color: #c0392b;
+}
+
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.reserve {
+  background: #27ae60;
+  color: white;
+}
+
+.btn.cancel {
+  background: #e74c3c;
+  color: white;
+}
+
+
+.auth-container {
+  max-width: 400px;
+  margin: 80px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 6px;
+}
+
+.auth-container h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-container label {
+  margin-top: 10px;
+}
+
+.auth-container input,
+.auth-container select {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.auth-link {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.auth-link a {
+  text-decoration: none;
+  color: #3498db;
+}
+
+.btn.primary {
+  margin-top: 20px;
+  background: #3498db;
+  color: #fff;
+}

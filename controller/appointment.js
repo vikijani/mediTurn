@@ -46,8 +46,6 @@ export default class AppointmentController {
                 });
             }
 
-            // For regular form submissions, redirect back to the appointments view
-            // with a query flag so the UI can show a popup confirmation.
             return res.redirect('/appointments/view?booked=1');
       
         } catch (error) {
@@ -60,9 +58,15 @@ export default class AppointmentController {
     static async getPatientAppointments(req, res) {
         try {
             const patientId = req.user.id;
-            const appointments = await Appointment.find({ patientId })
-                .populate({ path: "doctorId", model: User, select: "name email" })
-                .sort({ date: 1, time: 1 });
+            let appointments = await Appointment.find({ patientId })
+                .sort({ date: 1, time: 1 })
+                .lean();
+
+            appointments = await Promise.all(appointments.map(async (a) => {
+                a.doctorId = await User.findById(a.doctorId).select('name email').lean();
+                return a;
+            }));
+
             res.json(appointments);
         } catch (error) {
             console.error(error);
@@ -73,15 +77,25 @@ export default class AppointmentController {
     // Appointment cancellation by the patient
     static async cancelAppointment(req, res) {
         try{
-            const {appointmentId} = req.params;
-            const patientId = req.user.id;
+            const appointmentId = req.params.id || req.params.appointmentId;
+            const userId = req.user.id;
+            const role = req.user.role;
 
             const appointment = await Appointment.findById(appointmentId);
             if (!appointment) {
                 return res.status(404).json({ message: "نوبت پیدا نشد." });
             }
 
-            if (appointment.patientId.toString() !== patientId.toString()) {
+            // Allow cancellation by the patient who booked or the doctor assigned to the appointment
+            if (role === 'patient') {
+                if (appointment.patientId.toString() !== userId.toString()) {
+                    return res.status(403).json({ message: "شما اجازه لغو این نوبت را ندارید." });
+                }
+            } else if (role === 'doctor') {
+                if (appointment.doctorId.toString() !== userId.toString()) {
+                    return res.status(403).json({ message: "شما اجازه لغو این نوبت را ندارید." });
+                }
+            } else {
                 return res.status(403).json({ message: "شما اجازه لغو این نوبت را ندارید." });
             }
 
@@ -101,17 +115,18 @@ export default class AppointmentController {
         try {
             const doctorId = req.user.id;
             const appointments = await Appointment.find({ doctorId })
-                .populate({ path: "patientId", model: User, select: "name email" })
-                .sort({ createdAt: -1 });
+                .sort({ createdAt: -1 })
+                .lean();
 
             const patients = [];
-            
-            appointments.forEach(a => {
-                const exists = patients.find(
-                    (p) => p._id.toString() === a.patientId._id.toString()
-                );
-                if (!exists) patients.push(a.patientId)
-            })
+            for (const a of appointments) {
+                if (!a.patientId) continue;
+                const patient = await User.findById(a.patientId).select('name email').lean();
+                if (!patient) continue;
+                const exists = patients.find((p) => p._id.toString() === patient._id.toString());
+                if (!exists) patients.push(patient);
+            }
+
             res.json(patients);
 
         } catch (error) {

@@ -38,8 +38,8 @@
 
           <% appointments.forEach(a => { %>
             <tr>
-              <td><%= a.patientId.name %></td>
-              <td><%= a.doctorId.name %></td>
+              <td><%= (a.patientId && a.patientId.name) ? a.patientId.name : '—' %></td>
+              <td><%= (a.doctorId && a.doctorId.name) ? a.doctorId.name : '—' %></td>
               <td><%= a.date %></td>
               <td><%= a.time %></td>
 

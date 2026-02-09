@@ -24,11 +24,21 @@ export default class AppointmentViewController {
 
             const total = await Appointment.countDocuments(query);
 
-            const appointments = await Appointment.find(query)
-                .populate({ path: populateField, model: User, select: "name" })
+            let appointments = await Appointment.find(query)
                 .sort({ date: 1, time: 1 })
                 .limit(limit)
-                .skip(skip);
+                .skip(skip)
+                .lean();
+
+            // Manually populate user name to avoid populate schema lookup issues
+            appointments = await Promise.all(appointments.map(async (a) => {
+                if (populateField === 'doctorId') {
+                    a.doctorId = await User.findById(a.doctorId).select('name').lean();
+                } else {
+                    a.patientId = await User.findById(a.patientId).select('name').lean();
+                }
+                return a;
+            }));
 
             res.render("my-appointments", {
                 appointments,
@@ -51,16 +61,24 @@ export default class AppointmentViewController {
                 const limit = 5;
                 const skip = (page - 1) * limit;
 
-                const query = { status: "pending" };
+                const query = { status: "pending", doctorId: req.user.id };
 
                 const total = await Appointment.countDocuments(query);
 
-                const appointments = await Appointment.find(query)
-                    .populate({ path: "doctorId", model: User, select: "name" })
-                    .populate({ path: "patientId", model: User, select: "name" })
+                let appointments = await Appointment.find(query)
                     .sort({ date: 1, time: 1 })
                     .limit(limit)
-                    .skip(skip);
+                    .skip(skip)
+                    .lean();
+
+                // Manually populate doctor and patient names
+                appointments = await Promise.all(appointments.map(async (a) => {
+                    const doc = await User.findById(a.doctorId).select('name').lean();
+                    const pat = await User.findById(a.patientId).select('name').lean();
+                    a.doctorId = doc || { name: '—' };
+                    a.patientId = pat || { name: '—' };
+                    return a;
+                }));
 
                 res.render("appointments", {
                     appointments,

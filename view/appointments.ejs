@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>نوبت‌های در انتظار</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; border: 1px solid #ccc; text-align: center; }
+        .pending { color: orange; }
+        button { padding: 4px 8px; cursor: pointer; }
+        form { display: inline; }
+    </style>
+</head>
+<body>
+
+<h2>نوبت‌های در انتظار تایید</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>بیمار</th>
+            <th>پزشک</th>
+            <th>تاریخ</th>
+            <th>ساعت</th>
+            <th>وضعیت</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% if (appointments.length === 0) { %>
+            <tr>
+                <td colspan="6">نوبت در انتظاری وجود ندارد</td>
+            </tr>
+        <% } %>
+
+        <% appointments.forEach(appointment => { %>
+            <tr>
+                <td><%= appointment.patientId.name %></td>
+                <td><%= appointment.doctorId.name %></td>
+                <td><%= appointment.date %></td>
+                <td><%= appointment.time %></td>
+
+                <td class="pending">
+                    در حال بررسی
+                </td>
+
+                <td>
+                    <form action="/appointments/<%= appointment._id %>/confirm" method="POST">
+                        <button type="submit">تایید</button>
+                    </form>
+
+                    <form action="/appointments/<%= appointment._id %>/cancel" method="POST">
+                        <button type="submit">لغو</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>
+
+<br>
+
+<div>
+    <% if (currentPage > 1) { %>
+        <a href="?page=<%= currentPage - 1 %>">قبلی</a>
+    <% } %>
+
+    صفحه <%= currentPage %> از <%= totalPages %>
+
+    <% if (currentPage < totalPages) { %>
+        <a href="?page=<%= currentPage + 1 %>">بعدی</a>
+    <% } %>
+</div>
+
+</body>
+</html>

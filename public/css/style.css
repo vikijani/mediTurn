@@ -175,3 +175,23 @@ th, td {
   text-decoration: none;
   color: #3498db;
 }
+
+.status.pending {
+  color: #f39c12;
+}
+
+.status.confirmed {
+  color: #27ae60;
+}
+
+.status.canceled {
+  color: #c0392b;
+}
+
+.btn.cancel {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+}

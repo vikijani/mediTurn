@@ -14,8 +14,8 @@ router.get("/appointments/doctor/patients", AppointmentController.getDoctorPatie
 
 router.post("/appointments/:id/cancel", AppointmentController.cancelAppointment);
 
-router.get("/appointments/view", auth, AppointmentView.renderAppointments);
+router.get("/appointments/view", AppointmentView.renderPendingAppointments);
 
-router.get("/my-appointments", auth, AppointmentView.renderPatientAppointments);
+router.get("/my-appointments", AppointmentView.renderPatientAppointments);
 
 export default router;

@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>ورود</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <div class="auth-container">
   <h3>ورود به حساب</h3>
 
-  <form>
+  <form action="/login" method="POST">
     <label>شماره موبایل</label>
-    <input type="text" name="phone" placeholder="09xxxxxxxxx">
+    <input type="text" name="phone" placeholder="09xxxxxxxxx" required>
 
     <label>رمز عبور</label>
-    <input type="password" name="password">
+    <input type="password" name="password" required>
 
-    <button class="btn primary">ورود</button>
+    <button class="btn primary" type="submit">ورود</button>
   </form>
 
   <p class="auth-link">
     حساب ندارید؟
-    <a href="register.html">ثبت‌نام</a>
+    <a href="/register">ثبت‌نام</a>
   </p>
 </div>
 

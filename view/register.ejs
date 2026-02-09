@@ -3,35 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <title>ثبت‌نام</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <div class="auth-container">
   <h3>ایجاد حساب کاربری</h3>
 
-  <form>
+  <form action="/register" method="POST">
     <label>نقش</label>
-    <select name="role">
+    <select name="role" required>
       <option value="patient">بیمار</option>
       <option value="doctor">دکتر</option>
     </select>
 
     <label>نام و نام خانوادگی</label>
-    <input type="text" name="name">
+    <input type="text" name="name" required>
 
     <label>شماره موبایل</label>
-    <input type="text" name="phone" placeholder="09xxxxxxxxx">
+    <input type="text" name="phone" placeholder="09xxxxxxxxx" required>
 
     <label>رمز عبور</label>
-    <input type="password" name="password">
+    <input type="password" name="password" required>
 
-    <button class="btn primary">ثبت‌نام</button>
+    <button class="btn primary" type="submit">ثبت‌نام</button>
   </form>
 
   <p class="auth-link">
     حساب دارید؟
-    <a href="login.html">ورود</a>
+    <a href="/login">ورود</a>
   </p>
 </div>
 

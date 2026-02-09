@@ -1,77 +1,124 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>نوبت‌های در انتظار</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 8px; border: 1px solid #ccc; text-align: center; }
-        .pending { color: orange; }
-        button { padding: 4px 8px; cursor: pointer; }
-        form { display: inline; }
-    </style>
+  <meta charset="UTF-8">
+  <title>رزرو نوبت</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<h2>نوبت‌های در انتظار تایید</h2>
+<header class="top-bar">
+  <div class="logo">mediTurn</div>
+</header>
 
-<table>
-    <thead>
-        <tr>
+<div class="layout">
+
+  <main class="content">
+    <% if (user.role === "doctor") { %>
+      <h3>نوبت‌های در حال بررسی</h3>
+
+      <table>
+        <thead>
+          <tr>
             <th>بیمار</th>
-            <th>پزشک</th>
-            <th>تاریخ</th>
+            <th>دکتر</th>
+            <th>روز</th>
             <th>ساعت</th>
             <th>وضعیت</th>
             <th>عملیات</th>
-        </tr>
-    </thead>
+          </tr>
+        </thead>
 
-    <tbody>
-        <% if (appointments.length === 0) { %>
+        <tbody>
+          <% if (appointments.length === 0) { %>
             <tr>
-                <td colspan="6">نوبت در انتظاری وجود ندارد</td>
+              <td colspan="6">نوبتی برای نمایش وجود ندارد</td>
             </tr>
-        <% } %>
+          <% } %>
 
-        <% appointments.forEach(appointment => { %>
+          <% appointments.forEach(a => { %>
             <tr>
-                <td><%= appointment.patientId.name %></td>
-                <td><%= appointment.doctorId.name %></td>
-                <td><%= appointment.date %></td>
-                <td><%= appointment.time %></td>
+              <td><%= a.patientId.name %></td>
+              <td><%= a.doctorId.name %></td>
+              <td><%= a.date %></td>
+              <td><%= a.time %></td>
 
-                <td class="pending">
-                    در حال بررسی
-                </td>
+              <td class="status <%= a.status %>">
+                <% if (a.status === "pending") { %>
+                  در حال بررسی
+                <% } else if (a.status === "confirmed") { %>
+                  رزرو شده
+                <% } else { %>
+                  لغو شده
+                <% } %>
+              </td>
 
-                <td>
-                    <form action="/appointments/<%= appointment._id %>/confirm" method="POST">
-                        <button type="submit">تایید</button>
-                    </form>
+              <td>
+                <% if (a.status === "pending") { %>
+                  <form method="POST" action="/appointments/<%= a._id %>/confirm" style="display: inline;">
+                    <button class="btn reserve">تایید</button>
+                  </form>
+                <% } %>
 
-                    <form action="/appointments/<%= appointment._id %>/cancel" method="POST">
-                        <button type="submit">لغو</button>
-                    </form>
-                </td>
+                <% if (a.status !== "canceled") { %>
+                  <form method="POST" action="/appointments/<%= a._id %>/cancel" style="display: inline;">
+                    <button class="btn cancel">لغو</button>
+                  </form>
+                <% } %>
+              </td>
             </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <h3>رزرو نوبت</h3>
+
+      <% if (typeof doctors !== 'undefined' && doctors.length === 0) { %>
+        <p>دکتری برای نمایش وجود ندارد</p>
+      <% } else if (typeof doctors !== 'undefined') { %>
+        <% doctors.forEach(doctor => { %>
+          <div class="doctor-card">
+            <h4><%= doctor.name %></h4>
+            <p>تلفن: <%= doctor.phone %></p>
+            <form method="POST" action="/appointments">
+              <input type="hidden" name="doctorId" value="<%= doctor._id %>">
+              <label for="date-<%= doctor._id %>">تاریخ:</label>
+              <input type="date" id="date-<%= doctor._id %>" name="date" required>
+              <label for="time-<%= doctor._id %>">ساعت:</label>
+              <input type="time" id="time-<%= doctor._id %>" name="time" required>
+              <button type="submit" class="btn reserve">رزرو نوبت</button>
+            </form>
+          </div>
         <% }) %>
-    </tbody>
-</table>
-
-<br>
-
-<div>
-    <% if (currentPage > 1) { %>
-        <a href="?page=<%= currentPage - 1 %>">قبلی</a>
+      <% } %>
     <% } %>
+  </main>
 
-    صفحه <%= currentPage %> از <%= totalPages %>
+  <aside class="sidebar">
+    <div class="profile">
+      <div class="avatar">
+        <img src="/images/profile.jpg" alt="پروفایل" width="90" height="90">
+      </div>
+      <p><%= user.role === "doctor" ? "دکتر" : "بیمار" %></p>
+      <p><%= user.name %></p>
+    </div>
 
-    <% if (currentPage < totalPages) { %>
-        <a href="?page=<%= currentPage + 1 %>">بعدی</a>
-    <% } %>
+    <nav class="menu">
+      <a href="/appointments/view" class="active">رزرو نوبت</a>
+      <a href="/my-appointments">نوبت‌های من</a>
+    </nav>
+
+    <a href="/logout" class="logout">خروج از حساب</a>
+  </aside>
+
 </div>
+
+  <% if (typeof booked !== 'undefined' && booked == '1') { %>
+    <script>
+      alert('نوبت با موفقیت رزرو شد.');
+      try { history.replaceState(null, '', '/appointments/view'); } catch(e){}
+    </script>
+  <% } %>
 
 </body>
 </html>

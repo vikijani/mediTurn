@@ -1,111 +1,83 @@
 <!DOCTYPE html>
-<html lang="fa">
-
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>نوبت‌های من</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 8px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-
-        .pending {
-            color: orange;
-        }
-
-        .confirmed {
-            color: green;
-        }
-
-        .canceled {
-            color: red;
-        }
-
-        button {
-            padding: 4px 8px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>نوبت‌های من</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
 
-    <h2>نوبت‌های من</h2>
+<header class="top-bar">
+  <div class="logo">mediTurn</div>
+</header>
+
+<div class="layout">
+
+  <main class="content">
+    <h3>نوبت‌های من</h3>
 
     <table>
-        <thead>
-            <tr>
-                <th>پزشک</th>
-                <th>تاریخ</th>
-                <th>ساعت</th>
-                <th>وضعیت</th>
-                <th>عملیات</th>
-            </tr>
-        </thead>
+      <thead>
+        <tr>
+          <th><%= user.role === "doctor" ? "بیمار" : "دکتر" %></th>
+          <th>تاریخ</th>
+          <th>ساعت</th>
+          <th>وضعیت</th>
+        </tr>
+      </thead>
 
-        <tbody>
-            <% if (appointments.length===0) { %>
-                <tr>
-                    <td colspan="5">نوبتی ثبت نشده</td>
-                </tr>
-                <% } %>
+      <tbody>
+        <% if (appointments.length === 0) { %>
+          <tr>
+            <td colspan="4">نوبتی ثبت نشده</td>
+          </tr>
+        <% } %>
 
-                    <% appointments.forEach(appointment=> { %>
-                        <tr>
-                            <td>
-                                <%= appointment.doctorId.name %>
-                            </td>
-                            <td>
-                                <%= appointment.date %>
-                            </td>
-                            <td>
-                                <%= appointment.time %>
-                            </td>
+        <% appointments.forEach(a => { %>
+          <tr>
+            <td>
+              <% if (user.role === "doctor") { %>
+                <%= a.patientId && a.patientId.name ? a.patientId.name : '—' %>
+              <% } else { %>
+                <%= a.doctorId && a.doctorId.name ? a.doctorId.name : '—' %>
+              <% } %>
+            </td>
+            <td><%= a.date %></td>
+            <td><%= a.time %></td>
 
-                            <td class="status <%= a.status %>">
-                                <% if (a.status==="pending" ) { %>
-                                    در حال بررسی
-                                    <% } else if (a.status==="confirmed" ) { %>
-                                        تایید شده
-                                        <% } else { %>
-                                            لغو شده
-                                            <% } %>
-                            </td>
-
-                            <td>
-                                <% if (a.status !=="canceled" ) { %>
-                                    <form method="POST" action="/appointments/<%= a._id %>/cancel">
-                                        <button class="btn cancel">لغو</button>
-                                    </form>
-                                    <% } %>
-                            </td>
-                        </tr>
-                        <% }) %>
-        </tbody>
+            <td class="status <%= a.status %>">
+              <% if (a.status === "pending") { %>
+                در حال بررسی
+              <% } else if (a.status === "confirmed") { %>
+                رزرو شده
+              <% } else { %>
+                لغو شده
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
     </table>
+  </main>
 
-    <br>
-
-    <div>
-        <% if (currentPage> 1) { %>
-            <a href="?page=<%= currentPage - 1 %>">قبلی</a>
-            <% } %>
-
-                صفحه <%= currentPage %> از <%= totalPages %>
-
-                        <% if (currentPage < totalPages) { %>
-                            <a href="?page=<%= currentPage + 1 %>">بعدی</a>
-                            <% } %>
+  <aside class="sidebar">
+    <div class="profile">
+      <div class="avatar">
+        <img src="/images/profile.jpg" alt="پروفایل" width="90" height="90">
+      </div>
+      <p><%= user.role === "doctor" ? "دکتر" : "بیمار" %></p>
+      <p><%= user.name %></p>
     </div>
 
-</body>
+    <nav class="menu">
+      <a href="/appointments/view">رزرو نوبت</a>
+      <a href="/my-appointments" class="active">نوبت‌های من</a>
+    </nav>
 
+    <a href="/logout" class="logout">خروج از حساب</a>
+  </aside>
+
+</div>
+
+</body>
 </html>

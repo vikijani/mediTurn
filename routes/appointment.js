@@ -19,4 +19,8 @@ router.get("/appointments/view", auth, AppointmentView.renderPendingAppointments
 
 router.get("/my-appointments", auth, AppointmentView.renderPatientAppointments);
 
+router.post("/appointments/:id/confirm", auth, AppointmentView.confirmAppointment);
+
+router.post("/appointments/:id/cancel", auth, AppointmentView.cancelAppointment);
+
 export default router;

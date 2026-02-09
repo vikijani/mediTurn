@@ -9,4 +9,10 @@ router.post("/register", UserController.register);
 
 router.post("/login", UserController.login);
 
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  return res.redirect("/login");
+});
+
+
 export default router;

@@ -38,10 +38,17 @@ export default class AppointmentController {
                 status: "pending"
             });
       
-            res.status(201).json({
-                message: "نوبت ثبت شد.",
-                body: appointment
-            });
+            // If request expects JSON (API/ajax), return JSON.
+            if (req.headers.accept && req.headers.accept.includes("application/json")) {
+                return res.status(201).json({
+                    message: "نوبت ثبت شد.",
+                    body: appointment
+                });
+            }
+
+            // For regular form submissions, redirect back to the appointments view
+            // with a query flag so the UI can show a popup confirmation.
+            return res.redirect('/appointments/view?booked=1');
       
         } catch (error) {
             console.error(error);
@@ -54,7 +61,7 @@ export default class AppointmentController {
         try {
             const patientId = req.user.id;
             const appointments = await Appointment.find({ patientId })
-                .populate("doctorId", "name email")
+                .populate({ path: "doctorId", model: User, select: "name email" })
                 .sort({ date: 1, time: 1 });
             res.json(appointments);
         } catch (error) {
@@ -94,7 +101,7 @@ export default class AppointmentController {
         try {
             const doctorId = req.user.id;
             const appointments = await Appointment.find({ doctorId })
-                .populate("patientId", "name email")
+                .populate({ path: "patientId", model: User, select: "name email" })
                 .sort({ createdAt: -1 });
 
             const patients = [];

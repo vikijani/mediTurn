@@ -120,5 +120,19 @@
     </script>
   <% } %>
 
+  <% if (typeof confirmed !== 'undefined' && confirmed == '1') { %>
+    <script>
+      alert('نوبت تایید شد.');
+      try { history.replaceState(null, '', '/appointments/view'); } catch(e){}
+    </script>
+  <% } %>
+
+  <% if (typeof canceled !== 'undefined' && canceled == '1') { %>
+    <script>
+      alert('نوبت لغو شد.');
+      try { history.replaceState(null, '', '/appointments/view'); } catch(e){}
+    </script>
+  <% } %>
+
 </body>
 </html>

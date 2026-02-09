@@ -102,7 +102,13 @@ export default class AppointmentController {
             appointment.status = "canceled";
             await appointment.save();
 
-            res.json({ message: "نوبت لغو شد." });
+            // If request expects JSON (API/ajax), return JSON.
+            if (req.headers.accept && req.headers.accept.includes("application/json")) {
+                return res.json({ message: "نوبت لغو شد." });
+            }
+
+            return res.redirect('/my-appointments');
+      
         } catch (error) {
             console.error(error);
             res.status(500).json({message: "خطای سرور"});

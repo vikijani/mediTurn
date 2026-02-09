@@ -1,42 +1,92 @@
-# mediTurn 🏥
-Medical Appointment Scheduling System
+# mediTurn – Medical Appointment Booking System
 
-medicalTurn is a simple and practical medical appointment scheduling system built as a **university project** annd a **protfolio sample**.
-The project focuses on clean architecture, backend logic, and server-side rendering using Node.js.
-
-#### Doctor role is not verified in this educational project.
+mediTurn یک سیستم نوبت‌دهی پزشکی تحت وب است که با هدف شبیه‌سازی یک سناریوی واقعی بین بیمار و پزشک طراحی شده است.  
+در این پروژه هر دو نقش «بیمار» و «دکتر» تعامل فعال با سیستم دارند.
 
 ---
 
-## Features ✨
+## 🎯 هدف پروژه
 
-- User authentication (Patient / Doctor)
-- Role-based access control
-- Create, view, and cansel appointments
-- Server-side rendering with EJS
--MVC architecture
-- Data validation
-- Error handling
+- پیاده‌سازی یک سیستم نوبت‌دهی واقعی
+- تمرکز بر منطق بیزینسی (Business Logic)
+- استفاده از MVC و View Rendering
+- مدیریت نقش‌ها و سطح دسترسی کاربران
 
 ---
 
-## Tech Stack 🧱
+## 👥 نقش‌ها (Roles)
 
-### Backend
+### 🧑‍⚕️ Doctor
+- مشاهده درخواست‌های نوبت دریافتی
+- تایید (Confirm) یا رد (Cancel) نوبت‌ها
+- مدیریت نوبت‌های در انتظار
+
+### 🧑 Patient
+- انتخاب پزشک
+- تعیین تاریخ و ساعت نوبت
+- ارسال درخواست رزرو
+- مشاهده وضعیت نوبت‌های ثبت‌شده
+
+---
+
+## 🔁 جریان ثبت نوبت (Workflow)
+
+1. بیمار وارد سیستم می‌شود
+2. پزشک موردنظر را انتخاب می‌کند
+3. تاریخ و ساعت را مشخص می‌کند
+4. درخواست رزرو با وضعیت `pending` ثبت می‌شود
+5. پزشک درخواست را بررسی می‌کند:
+   - در صورت تایید → `confirmed`
+   - در صورت رد → `canceled`
+6. بیمار می‌تواند وضعیت نوبت خود را مشاهده کند
+
+---
+
+## 🧱 معماری پروژه
+
+پروژه بر اساس الگوی **MVC** پیاده‌سازی شده است:
+
+- **Model**:  
+  MongoDB + Mongoose (User, Appointment)
+
+- **View**:  
+  EJS Templates (Server Side Rendering)
+
+- **Controller**:  
+  مدیریت منطق نوبت‌دهی، تایید و لغو نوبت‌ها
+
+---
+
+## 🔐 احراز هویت و دسترسی
+
+- احراز هویت با Session / Cookie
+- دسترسی به صفحات بر اساس Role
+- محافظت از Route‌ها با Middleware
+
+---
+
+## 🛠 تکنولوژی‌های استفاده‌شده
+
 - Node.js
 - Express.js
 - MongoDB
 - Mongoose
-
-### Frontend
-- EJS (Server-Side Rendering)
-- HTML / CSS
-
-### Architecture & Tools
+- EJS
 - MVC Architecture
-- RESTful routing
-- Enviroment variables
+
+> در این پروژه تکنولوژی جدیدی اضافه نشده و تمرکز اصلی روی بهبود منطق سیستم بوده است.
 
 ---
 
-## Project Stucture (MVC) 📂
+## 📌 نکات مهم
+
+- هیچ عملیاتی بدون احراز هویت قابل انجام نیست
+- هر نقش فقط به داده‌های مرتبط با خود دسترسی دارد
+- وضعیت نوبت‌ها به‌صورت پویا مدیریت می‌شود
+- سیستم به‌گونه‌ای طراحی شده که قابل توسعه باشد
+
+---
+
+## 🚀 نتیجه‌گیری
+
+mediTurn نمونه‌ای از یک سیستم نوبت‌دهی واقعی است که در آن تعامل بین بیمار و پزشک به‌صورت منطقی و قابل کنترل پیاده‌سازی شده و تمرکز اصلی روی طراحی درست جریان‌ها و مسئولیت‌ها بوده است.

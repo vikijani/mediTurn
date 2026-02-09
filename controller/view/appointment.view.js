@@ -85,7 +85,9 @@ export default class AppointmentViewController {
                     user: req.user,
                     currentPage: page,
                     totalPages: Math.ceil(total / limit),
-                    booked: req.query.booked || 0
+                    booked: req.query.booked || 0,
+                    confirmed: req.query.confirmed || 0,
+                    canceled: req.query.canceled || 0
                 });
             } else {
                 // For patients, show doctors to book
@@ -93,7 +95,9 @@ export default class AppointmentViewController {
                 res.render("appointments", {
                     doctors,
                     user: req.user,
-                    booked: req.query.booked || 0
+                    booked: req.query.booked || 0,
+                    confirmed: req.query.confirmed || 0,
+                    canceled: req.query.canceled || 0
                 });
             }
         } catch (error) {
@@ -108,7 +112,7 @@ export default class AppointmentViewController {
                 status: "confirmed"
             });
 
-            res.redirect("back");
+            res.redirect("back?confirmed=1");
         } catch (error) {
             console.error(error);
             res.status(500).render("error", { message: "خطا در تایید نوبت" });
@@ -121,7 +125,7 @@ export default class AppointmentViewController {
                 status: "canceled"
             });
 
-            res.redirect("/my-appointments");
+            res.redirect("back?canceled=1");
         } catch (error) {
             console.error(error);
             res.status(500).render("error", { message: "خطا در لغو نوبت" });

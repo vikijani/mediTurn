@@ -1,21 +1,22 @@
 import AppointmentController from "../controller/appointment.js";
 import express from "express";
 import AppointmentView from "../controller/view/appointment.view.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post("/appointments", AppointmentController.createAppointment);
+router.post("/appointments", auth, AppointmentController.createAppointment);
 
-router.get("/appointments", AppointmentController.getPatientAppointments);
+router.get("/appointments", auth, AppointmentController.getPatientAppointments);
 
-router.get("/appointments/doctor", AppointmentController.getAllDoctors);
+router.get("/appointments/doctor", auth, AppointmentController.getAllDoctors);
 
-router.get("/appointments/doctor/patients", AppointmentController.getDoctorPatients);
+router.get("/appointments/doctor/patients", auth, AppointmentController.getDoctorPatients);
 
-router.post("/appointments/:id/cancel", AppointmentController.cancelAppointment);
+router.post("/appointments/:id/cancel", auth, AppointmentController.cancelAppointment);
 
-router.get("/appointments/view", AppointmentView.renderPendingAppointments);
+router.get("/appointments/view", auth, AppointmentView.renderPendingAppointments);
 
-router.get("/my-appointments", AppointmentView.renderPatientAppointments);
+router.get("/my-appointments", auth, AppointmentView.renderPatientAppointments);
 
 export default router;

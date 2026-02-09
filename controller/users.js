@@ -4,6 +4,7 @@ import JWT from "jsonwebtoken";
 import _ from "lodash";
 import bcrypt from "bcrypt";
 import Users from "../model/users.js";
+configDotenv();
 
 export default class UserController {
     static async getAllUser(req, res) {
@@ -40,14 +41,13 @@ export default class UserController {
                 id: newuser._id, role: newuser.role
             }, process.env.JWT_SECRET);
 
-            return res
-                .header("Authorization", `Bearer ${token}`)
-                .status(201)
-                .json({
-                    message: "ثبت نام با موفقیت انجام شد.",
-                    token,
-                    data: _.pick(newuser, ["phone", "name"])
-                })
+            res.cookie("token", token, {
+                httpOnly: true,
+                sameSite: "lax"
+            });
+
+            return res.redirect("/appointments/view");
+
         } catch (e) {
             console.log("REGISTER ERROR:", e);
             return res.status(500).json({ message: "ثبت نام انجام نشد خطا در سرور." })
@@ -56,8 +56,8 @@ export default class UserController {
 
     static async login(req, res) {
         const schema = joi.object({
-            email: joi.string().email().required(),
-            password: joi.string().min(8).required()
+            phone: joi.string().required(),
+            password: joi.string().min(6).required()
         });
 
         const { error } = schema.validate(req.body);
@@ -66,12 +66,15 @@ export default class UserController {
         }
 
         try {
-            const user = await Users.findOne({ phone: req.body.phone, isActive: true });
+            const user = await Users.findOne({ phone: req.body.phone });
             if (!user) {
                 return res.status(400).json({ error: "شماره تماس یا رمز عبور اشتباه است." });
             }
 
-            const isValid = await bcrypt.compare(req.body.password, user.password);
+            const isValid = await bcrypt.compare(
+                req.body.password,
+                user.passwordHash
+            );
             if (!isValid) {
                 return res.status(400).json({ error: "شماره تماس یا رمز عبور اشتباه است." });
             }
@@ -81,11 +84,13 @@ export default class UserController {
                 process.env.JWT_SECRET
             );
 
-            return res.json({
-                message: "ورود با موفقیت انجام شد.",
-                token,
-                data: _.pick(user, ["userId", "email", "name", "phone", "createdAt"])
+            res.cookie("token", token, {
+                httpOnly: true,
+                sameSite: "lax"
             });
+
+            return res.redirect("/appointments/view");
+
         } catch (err) {
             console.error("Login error:", err);
             return res.status(500).json({ message: "خطا در ورود کاربر." });

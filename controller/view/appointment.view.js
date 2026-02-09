@@ -83,7 +83,7 @@ export default class AppointmentViewController {
                 status: "canceled"
             });
 
-            res.redirect("back");
+            res.redirect("/my-appointments");
         } catch (error) {
             console.error(error);
             res.status(500).render("error", { message: "خطا در لغو نوبت" });

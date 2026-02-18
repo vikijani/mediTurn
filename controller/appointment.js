@@ -7,7 +7,7 @@ export default class AppointmentController {
     static async createAppointment(req, res) {
         try {
             // check doctor
-            const { doctorId, date, time } = req.body;
+            const { doctorId, date, time, day } = req.body;
             const patientId = req.user.id;
             const { id } = req.params;
 
@@ -22,6 +22,7 @@ export default class AppointmentController {
                 doctorId,
                 date,
                 time,
+                day,
                 status: { $ne: "canceled" }
             });
 
@@ -35,6 +36,7 @@ export default class AppointmentController {
                 doctorId,
                 date,
                 time,
+                day,
                 status: "pending"
             });
       
@@ -59,7 +61,7 @@ export default class AppointmentController {
         try {
             const patientId = req.user.id;
             let appointments = await Appointment.find({ patientId })
-                .sort({ date: 1, time: 1 })
+                .sort({ date: 1, time: 1, day: 1 })
                 .lean();
 
             appointments = await Promise.all(appointments.map(async (a) => {

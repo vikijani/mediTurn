@@ -25,7 +25,7 @@ export default class AppointmentViewController {
             const total = await Appointment.countDocuments(query);
 
             let appointments = await Appointment.find(query)
-                .sort({ date: 1, time: 1 })
+                .sort({ date: 1, time: 1, day: 1 })
                 .limit(limit)
                 .skip(skip)
                 .lean();
@@ -66,7 +66,7 @@ export default class AppointmentViewController {
                 const total = await Appointment.countDocuments(query);
 
                 let appointments = await Appointment.find(query)
-                    .sort({ date: 1, time: 1 })
+                    .sort({ date: 1, time: 1, day:1 })
                     .limit(limit)
                     .skip(skip)
                     .lean();
